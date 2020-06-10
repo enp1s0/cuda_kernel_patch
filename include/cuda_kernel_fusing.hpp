@@ -30,7 +30,7 @@ std::vector<std::string> get_argument_names(const std::string argument_string) {
 		end_pos = argument_string.find_first_of(',', start_pos);
 
 		if (end_pos == std::string::npos) {
-			break;
+			end_pos = argument_string.size();
 		}
 	}
 
