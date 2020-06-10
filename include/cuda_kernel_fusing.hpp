@@ -36,6 +36,24 @@ std::vector<std::string> get_argument_names(const std::string argument_string) {
 	return argument_names;
 }
 } // namespace utils
+
+class kernel_constructor {
+	const std::string global_argument_string;
+	const std::vector<std::string> global_argument_names;
+	const std::vector<std::string> appending_device_argument_names;
+
+	const std::string preprocess_string;
+	const std::string postprocess_string;
+
+public:
+	kernel_constructor(const std::string global_argument_string, const std::string device_argument_string, const std::string preprocess_string, const std::string postprocess_string)
+		: global_argument_string(global_argument_string),
+		preprocess_string(preprocess_string),
+		postprocess_string(postprocess_string),
+		global_argument_names(utils::get_argument_names(global_argument_string)),
+		appending_device_argument_names(utils::get_argument_names(global_argument_string))
+	{}
+};
 } // namespace cuda_kernel_fusing
 
 #endif /* end of include guard */
