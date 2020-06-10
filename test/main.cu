@@ -3,7 +3,7 @@
 int main() {
 	cuda_kernel_fusing::kernel_constructor kernel_constructor(
 			"float* const dst_ptr, const float* const src_ptr",
-			"const unsigned tid, const float& a",
+			"const unsigned tid, float& a",
 			"const unsigned tid = threadIdx.x; float a = 1.0f;",
 			"dst_ptr[tid] = a;"
 			);
