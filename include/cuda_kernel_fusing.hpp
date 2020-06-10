@@ -56,7 +56,7 @@ public:
 	{}
 
 	// Debug functions
-	void print_arguments() const {
+	void debug_print_arguments() const {
 		std::printf("# %15s : %s\n", "global args", global_argument_string.c_str());
 		for (const auto str : global_argument_names) {
 			std::printf("- %s\n", str.c_str());
@@ -66,9 +66,9 @@ public:
 			std::printf("- %s\n", str.c_str());
 		}
 		std::printf("# %15s :\n", "Preprocess");
-		std::printf("%s\n", preprocess_string.c_str());
+		std::printf("```cpp\n%s\n```\n", preprocess_string.c_str());
 		std::printf("# %15s :\n", "Postprocess");
-		std::printf("%s\n", postprocess_string.c_str());
+		std::printf("```cpp\n%s\n```\n", postprocess_string.c_str());
 	}
 };
 } // namespace cuda_kernel_fusing
