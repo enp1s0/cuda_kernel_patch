@@ -55,7 +55,7 @@ public:
 		preprocess_string(preprocess_string),
 		postprocess_string(postprocess_string),
 		global_argument_names(utils::get_argument_names(global_argument_string)),
-		appending_device_argument_names(utils::get_argument_names(global_argument_string))
+		appending_device_argument_names(utils::get_argument_names(device_argument_string))
 	{}
 
 	// Debug functions
