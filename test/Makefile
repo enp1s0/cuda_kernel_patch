@@ -2,7 +2,7 @@ NVCC=nvcc
 NVCCFLAGS=-std=c++11 -I../include
 TARGET=cukf.test
 
-$(TARGET):main.cu
+$(TARGET):main.cu ../include/cuda_kernel_fusing.hpp
 	$(NVCC) $< $(NVCCFLAGS) -o $@
 
 clean:
