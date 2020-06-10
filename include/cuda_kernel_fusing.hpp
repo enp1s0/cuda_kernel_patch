@@ -21,6 +21,9 @@ std::vector<std::string> get_argument_names(const std::string argument_string) {
 
 	std::size_t start_pos = 0;
 	std::size_t end_pos = argument_string.find_first_of(',');
+	if (end_pos == std::string::npos) {
+		end_pos = argument_string.size();
+	}
 
 	while (start_pos < argument_string.size()) {
 		std::string sub_str(argument_string, start_pos, end_pos - start_pos);
