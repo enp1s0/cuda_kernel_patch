@@ -45,17 +45,17 @@ This code outputs fused kernel code for NVRTC like below.
 
 ```cpp
 export "C" {
-__device__ void device_func_0(float* const dst_ptr, const float* const src_ptr,const unsigned tid, const float& a)
+__device__ void device_func_0(float* const dst_ptr, const float* const src_ptr,const unsigned tid, float& a)
 {
 	a *= src_ptr[tid];
 }
 
-__device__ void device_func_1(float* const dst_ptr, const float* const src_ptr,const unsigned tid, const float& a)
+__device__ void device_func_1(float* const dst_ptr, const float* const src_ptr,const unsigned tid, float& a)
 {
 	a /= src_ptr[tid];
 }
 
-__device__ void device_func_2(float* const dst_ptr, const float* const src_ptr,const unsigned tid, const float& a)
+__device__ void device_func_2(float* const dst_ptr, const float* const src_ptr,const unsigned tid, float& a)
 {
 	dst_ptr[tid] = a;
 }
