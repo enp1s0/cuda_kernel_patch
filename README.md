@@ -14,7 +14,6 @@ int main() {
 			"dst_ptr[tid] = a;"
 			);
 
-	kernel_constructor.debug_print_arguments();
 	kernel_constructor.add_device_function(
 			"device_func_0",
 			R"(
@@ -67,7 +66,6 @@ __global__ void cukf_main(float* const dst_ptr, const float* const src_ptr) {
 	device_func_1(dst_ptr, src_ptr, tid, a);
 	device_func_0(dst_ptr, src_ptr, tid, a);
 	device_func_1(dst_ptr, src_ptr, tid, a);
-	device_func_2(dst_ptr, src_ptr, tid, a);
 }
 } // export C
 ```
