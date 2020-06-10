@@ -42,7 +42,7 @@ int main() {
 }
 ```
 
-This code output fused kernel code for NVRTC.
+This code outputs fused kernel code for NVRTC like below.
 
 ```cpp
 export "C" {
