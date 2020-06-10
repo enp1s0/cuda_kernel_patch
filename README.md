@@ -1,6 +1,6 @@
 # CUDA Kernel Fusing
 
-This library provides CUDA kernel fusing.
+This library provides dynamic CUDA kernel fusing.
 
 ## Sample
 ```cpp
