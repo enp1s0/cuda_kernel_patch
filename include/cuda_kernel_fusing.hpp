@@ -92,7 +92,7 @@ public:
 	}
 
 	std::string generate_kernel_code(const std::vector<std::string> device_function_names) const {
-		std::string kernel_code = "export \"C\" {\n";
+		std::string kernel_code = "extern \"C\" {\n";
 
 		// Add the definition of device functions
 		std::vector<std::string> unique_device_function_names(device_function_names.size());
