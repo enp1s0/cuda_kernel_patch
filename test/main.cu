@@ -64,9 +64,9 @@ int main() {
 
 	// Get PTX
 	std::size_t ptx_size;
-	nvrtcGetPTXSize(program,&ptx_size);
+	nvrtcGetPTXSize(program, &ptx_size);
 	char *ptx = new char [ptx_size];
-	nvrtcGetPTX(program,ptx);
+	nvrtcGetPTX(program, ptx);
 	nvrtcDestroyProgram(&program);
 
 	// Create kernel image
@@ -75,10 +75,10 @@ int main() {
 	CUmodule cuModule;
 	CUfunction cuFunction;
 	cuInit(0);
-	cuDeviceGet(&cuDevice,0);
-	cuCtxCreate(&cuContext,0,cuDevice);
-	cuModuleLoadDataEx(&cuModule,ptx,0,0,0);
-	cuModuleGetFunction(&cuFunction,cuModule,"kernel");
+	cuDeviceGet(&cuDevice, 0);
+	cuCtxCreate(&cuContext, 0, cuDevice);
+	cuModuleLoadDataEx(&cuModule, ptx, 0, 0, 0);
+	cuModuleGetFunction(&cuFunction, cuModule, "cukf_main");
 	delete [] ptx;
 
 	// Launch
@@ -90,8 +90,8 @@ int main() {
 	cuLaunchKernel(cuFunction,
 			N / block_size,1,1,
 			block_size,1,1,
-			0,NULL,
-			args,0);
+			0, NULL,
+			args, 0);
 	cuCtxSynchronize();
 
 	cudaFree(dx);
