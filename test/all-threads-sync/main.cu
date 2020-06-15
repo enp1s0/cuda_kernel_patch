@@ -2,23 +2,36 @@
 #include <cuda.h>
 #include <cuda_kernel_fusing.hpp>
 
-constexpr std::size_t N = 1lu << 25;
+constexpr std::size_t N = 1lu << 29;
 constexpr std::size_t block_size = 1lu << 8;
 
 int main() {
 	cuda_kernel_fusing::kernel_constructor kernel_constructor(
-			"float* const dst_ptr, const float* const src_ptr",
-			"const unsigned tid, float& a",
-			"const unsigned tid = threadIdx.x; float a = 1.0f;",
-			"dst_ptr[tid] = a;"
+			"float* const dst_ptr, const float* const src_ptr, const unsigned inner_loop",
+			"const unsigned tid, float* const dp",
+			"const unsigned tid = threadIdx.x; float* dp = dst_ptr + inner_loop * tid;",
+			""
 			);
 
 	kernel_constructor.debug_print_arguments();
 	kernel_constructor.add_device_function(
+			"device_func_init",
+			R"(
+{
+	const float* const sp = src_ptr + inner_loop * tid;
+	for (unsigned i = 0; i < inner_loop; i++) {
+		dp[i] = sp[i];
+	}
+}
+)"
+			);
+	kernel_constructor.add_device_function(
 			"device_func_0",
 			R"(
 {
-	a *= src_ptr[tid];
+	for (unsigned i = 0; i < inner_loop; i++) {
+		dp[i] *= 4;
+	}
 }
 )"
 			);
@@ -26,13 +39,16 @@ int main() {
 			"device_func_1",
 			R"(
 {
-	a /= src_ptr[tid];
+	for (unsigned i = 0; i < inner_loop; i++) {
+		dp[i] *= 2;
+	}
 }
 )"
 			);
 
 	std::printf("# -- kernel code\n");
 	const std::string kernel_code = kernel_constructor.generate_kernel_code({
+				"device_func_init",
 				"device_func_0",
 				"device_func_1",
 				"device_func_0",
@@ -86,9 +102,11 @@ int main() {
 	cudaMalloc(&dx, sizeof(float) * N);
 	cudaMalloc(&dy, sizeof(float) * N);
 
-	void *args[] = {&dy,&dx};
+	unsigned inner_loop = 4;
+
+	void *args[] = {&dy,&dx,&inner_loop};
 	cuLaunchKernel(cuFunction,
-			N / block_size,1,1,
+			N / block_size / inner_loop,1,1,
 			block_size,1,1,
 			0, NULL,
 			args, 0);
