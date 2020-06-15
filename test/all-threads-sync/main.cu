@@ -56,13 +56,22 @@ int main() {
 				});
 	std::cout << kernel_code << std::endl;
 
+	const char* include_paths[] = {
+		"/usr/local/cuda-11.0/include/"
+	};
+	constexpr unsigned num_headers = 1;
+	const char* headers_list[] = {
+		"cooperative_groups.h"
+	};
+
 	nvrtcProgram program;
 	nvrtcCreateProgram(&program,
 			kernel_code.c_str(),
 			"kernel.cu",
-			0,
-			NULL,
-			NULL);
+			num_headers,
+			include_paths,
+			headers_list
+			);
 	const char *options[] = {
 		"--gpu-architecture=compute_75",
 	};
