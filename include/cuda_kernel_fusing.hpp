@@ -92,7 +92,7 @@ public:
 	}
 
 	std::string generate_kernel_code(const std::vector<std::string> device_function_names) const {
-		std::string kernel_code = "extern \"C\" {\n";
+		std::string kernel_code = "";
 
 		// Add the definition of device functions
 		std::vector<std::string> unique_device_function_names(device_function_names.size());
@@ -104,14 +104,13 @@ public:
 		}
 		
 		// Add a global function
-		kernel_code += "__global__ void cukf_main(" + global_argument_string + ") {\n";
+		kernel_code += "extern \"C\" __global__ void cukf_main(" + global_argument_string + ") {\n";
 		kernel_code += preprocess_string + "\n";
 		for (const auto device_function_name : device_function_names) {
 			kernel_code += device_function_name + "(" + device_calling_argument_string + ");\n";
 		}
 		kernel_code += postprocess_string + "\n";
 		kernel_code += "}\n";
-		kernel_code += "} // export C\n";
 
 		return kernel_code;
 	}
