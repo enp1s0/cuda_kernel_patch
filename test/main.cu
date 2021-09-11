@@ -1,12 +1,12 @@
 #include <nvrtc.h>
 #include <cuda.h>
-#include <cuda_kernel_fusing.hpp>
+#include <cuda_kernel_patch.hpp>
 
 constexpr std::size_t N = 1lu << 25;
 constexpr std::size_t block_size = 1lu << 8;
 
 int main() {
-	cuda_kernel_fusing::kernel_constructor kernel_constructor(
+	cuda_kernel_patch::kernel_constructor kernel_constructor(
 			"float* const dst_ptr, const float* const src_ptr",
 			"const unsigned tid, float& a",
 			"const unsigned tid = threadIdx.x; float a = 1.0f;",

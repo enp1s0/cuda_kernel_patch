@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-namespace cuda_kernel_fusing {
+namespace cuda_kernel_patch {
 namespace utils {
 std::string get_argument_name(const std::string argument) {
 	const std::size_t end_pos = argument.find_last_not_of(' ');
@@ -125,6 +125,6 @@ public:
 		std::printf("```cpp\n%s\n```\n", postprocess_string.c_str());
 	}
 };
-} // namespace cuda_kernel_fusing
+} // namespace cuda_kernel_patch
 
 #endif /* end of include guard */
