@@ -1,4 +1,4 @@
-# cuKernelPatch for JIT Compiration
+# cuKernelPatch
 
 This library constructs CUDA kernel for JIT Compilation from kernel spatch codes.
 
