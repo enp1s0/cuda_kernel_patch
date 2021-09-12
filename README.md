@@ -17,17 +17,13 @@ int main() {
 	kernel_constructor.add_device_function(
 			"device_func_0",
 			R"(
-{
 	a *= src_ptr[tid];
-}
 )"
 			);
 	kernel_constructor.add_device_function(
 			"device_func_1",
 			R"(
-{
 	a /= src_ptr[tid];
-}
 )"
 			);
 
