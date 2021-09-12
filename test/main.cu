@@ -17,17 +17,13 @@ int main() {
 	kernel_constructor.add_device_function(
 			"device_func_0",
 			R"(
-{
 	a *= src_ptr[tid];
-}
 )"
 			);
 	kernel_constructor.add_device_function(
 			"device_func_1",
 			R"(
-{
 	a /= src_ptr[tid];
-}
 )"
 			);
 
@@ -40,6 +36,7 @@ int main() {
 				});
 	std::cout << kernel_code << std::endl;
 
+	std::printf("Preparing for compilation...\n");
 	nvrtcProgram program;
 	nvrtcCreateProgram(&program,
 			kernel_code.c_str(),
@@ -48,7 +45,7 @@ int main() {
 			NULL,
 			NULL);
 	const char *options[] = {
-		"--gpu-architecture=compute_75",
+		"--gpu-architecture=compute_80",
 	};
 	nvrtcResult result = nvrtcCompileProgram(program, 1, options);
 	size_t log_size;
@@ -63,6 +60,7 @@ int main() {
 	}
 
 	// Get PTX
+	std::printf("Generating PTX...\n");
 	std::size_t ptx_size;
 	nvrtcGetPTXSize(program, &ptx_size);
 	char *ptx = new char [ptx_size];
@@ -70,6 +68,7 @@ int main() {
 	nvrtcDestroyProgram(&program);
 
 	// Create kernel image
+	std::printf("Creating kernel function...\n");
 	CUdevice cuDevice;
 	CUcontext cuContext;
 	CUmodule cuModule;
@@ -82,6 +81,7 @@ int main() {
 	delete [] ptx;
 
 	// Launch
+	std::printf("Launching kernel function...\n");
 	float *dx, *dy;
 	cudaMalloc(&dx, sizeof(float) * N);
 	cudaMalloc(&dy, sizeof(float) * N);
