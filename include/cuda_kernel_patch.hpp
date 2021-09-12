@@ -87,7 +87,7 @@ public:
 
 	void add_device_function(const std::string function_name, const std::string function_definition) {
 		device_functions.insert(std::make_pair(function_name,
-					"__device__ void " + function_name + "(" + device_argument_string + ")" + function_definition
+					"__device__ void " + function_name + "(" + device_argument_string + "){" + function_definition + "}"
 					));
 	}
 
