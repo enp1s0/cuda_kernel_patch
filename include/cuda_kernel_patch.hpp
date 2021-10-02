@@ -109,7 +109,7 @@ public:
 			} else if (inline_patches.count(name)) {
 				inline_patche_names.push_back(name);
 			} else {
-				throw std::runtime_error("No such device function of inline patch : " + name);
+				throw std::runtime_error("No such device function or inline patch : " + name);
 			}
 		}
 
