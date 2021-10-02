@@ -75,6 +75,7 @@ class kernel_constructor {
 	const std::string postprocess_string;
 
 	std::map<std::string, std::string> device_functions;
+	std::map<std::string, std::string> inline_patches;
 
 public:
 	kernel_constructor(const std::string global_argument_string, const std::string device_argument_string, const std::string preprocess_string, const std::string postprocess_string)
@@ -91,8 +92,26 @@ public:
 					));
 	}
 
-	std::string generate_kernel_code(const std::vector<std::string> device_function_names) const {
+	void add_inline_patch(const std::string patch_name, const std::string patch_definition) {
+		inline_patches.insert(std::make_pair(patch_name,
+					patch_definition
+					));
+	}
+
+	std::string generate_kernel_code(const std::vector<std::string> parts_name_list) const {
 		std::string kernel_code = "";
+
+		std::vector<std::string> device_function_names;
+		std::vector<std::string> inline_patche_names;
+		for (const auto& name : parts_name_list) {
+			if (device_functions.count(name)) {
+				device_function_names.push_back(name);
+			} else if (inline_patches.count(name)) {
+				inline_patche_names.push_back(name);
+			} else {
+				throw std::runtime_error("No such device function of inline patch : " + name);
+			}
+		}
 
 		// Add the definition of device functions
 		std::vector<std::string> unique_device_function_names(device_function_names.size());
@@ -106,8 +125,13 @@ public:
 		// Add a global function
 		kernel_code += "extern \"C\" __global__ void cukf_main(" + global_argument_string + ") {\n";
 		kernel_code += preprocess_string + "\n";
-		for (const auto device_function_name : device_function_names) {
-			kernel_code += device_function_name + "(" + device_calling_argument_string + ");\n";
+		for (const auto parts_name : parts_name_list) {
+			if (device_functions.count(parts_name)) {
+				kernel_code += parts_name + "(" + device_calling_argument_string + ");\n";
+			} else {
+				kernel_code += "// inline patch " + parts_name + "\n";
+				kernel_code += inline_patches.at(parts_name);
+			}
 		}
 		kernel_code += postprocess_string + "\n";
 		kernel_code += "}\n";

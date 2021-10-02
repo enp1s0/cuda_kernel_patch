@@ -26,6 +26,12 @@ int main() {
 	a /= src_ptr[tid];
 )"
 			);
+	kernel_constructor.add_inline_patch(
+			"patch_0",
+			R"(
+printf("%u\n", tid);
+)"
+			);
 
 	std::printf("# -- kernel code\n");
 	std::printf("%s\n", kernel_constructor.generate_kernel_code({
@@ -33,6 +39,7 @@ int main() {
 				"device_func_1",
 				"device_func_0",
 				"device_func_1",
+				"patch_0",
 				}).c_str());
 }
 ```
@@ -62,6 +69,7 @@ __global__ void cukf_main(float* const dst_ptr, const float* const src_ptr) {
 	device_func_1(dst_ptr, src_ptr, tid, a);
 	device_func_0(dst_ptr, src_ptr, tid, a);
 	device_func_1(dst_ptr, src_ptr, tid, a);
+	printf("%u\n", tid);
 }
 } // export C
 ```
