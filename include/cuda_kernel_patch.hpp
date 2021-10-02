@@ -129,6 +129,7 @@ public:
 			if (device_functions.count(parts_name)) {
 				kernel_code += parts_name + "(" + device_calling_argument_string + ");\n";
 			} else {
+				kernel_code += "// inline patch " + parts_name + "\n";
 				kernel_code += inline_patches.at(parts_name);
 			}
 		}
