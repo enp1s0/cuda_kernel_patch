@@ -26,6 +26,12 @@ int main() {
 	a /= src_ptr[tid];
 )"
 			);
+	kernel_constructor.add_inline_patch(
+			"patch_0",
+			R"(
+printf("%e\n", a);
+)"
+			);
 
 	std::printf("# -- kernel code\n");
 	const std::string kernel_code = kernel_constructor.generate_kernel_code({
@@ -33,6 +39,7 @@ int main() {
 				"device_func_1",
 				"device_func_0",
 				"device_func_1",
+				"patch_0",
 				});
 	std::cout << kernel_code << std::endl;
 
